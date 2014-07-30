@@ -65,6 +65,10 @@ class ofxParagraph{
             mIndent = indent;
             layout();
         }
+        void setPosition(ofPoint pos)
+        {
+            mPosition = pos;
+        }
         void setSpacing(int spacing)
         {
             mSpacing = spacing;
