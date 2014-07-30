@@ -7,10 +7,10 @@ class ofApp : public ofBaseApp{
 
 	public:
 		void setup();
-		void update();
 		void draw();
 
-		void keyPressed(int key);
-        ofxParagraph* paragraph;
+        ofxParagraph* p1;
+        ofxParagraph* p2;
+        ofxParagraph* p3;
     
 };

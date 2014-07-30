@@ -20,10 +20,11 @@ class ofxParagraph{
     
         ofxParagraph(std::string text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", int width = 620, alignment align = left)
         : mColor(ofColor::black)
-        , mIndent(60)
+        , mIndent(40)
         , mSpacing(10)
-        , mLeading(40)
+        , mLeading(28)
         , mPosition(100, 100)
+        , bDrawBorder(false)
         {
             parse(text);
             setAlignment(align);
@@ -41,9 +42,15 @@ class ofxParagraph{
                 }   else if (mAlign == right){
                     drawRightAligned();
                 }
+                if (bDrawBorder == true){
+                    ofNoFill();
+                    ofSetColor(ofColor::white);
+                    ofRect(mPosition.x - BORDER_PADDDING,
+                           mPosition.y - mFont.getLineHeight() - BORDER_PADDDING,
+                           mWidth + BORDER_PADDDING,
+                           (mLines.size() * mLeading) + (BORDER_PADDDING*2));
+                }
             } ofPopStyle();
-            ofNoFill();
-            ofRect(mPosition.x, mPosition.y - 30, mWidth, mLines.size() * mLeading);
 
         }
         void setText(std::string text)
@@ -88,6 +95,10 @@ class ofxParagraph{
         {
             mLeading = leading;
         }
+        void drawBorder(bool draw)
+        {
+            bDrawBorder = draw;
+        }
     
     private:
         int mWidth;
@@ -98,6 +109,7 @@ class ofxParagraph{
         ofPoint mPosition;
         ofTrueTypeFont mFont;
         alignment mAlign;
+        bool bDrawBorder;
         struct word {
             string text;
             int width;
@@ -105,11 +117,12 @@ class ofxParagraph{
         vector< word > mWords;
         vector< vector<word> > mLines;
         vector< int > mLineWidths;
+        static const int BORDER_PADDDING = 10;
     
         void parse(std::string text)
         {
             std::string mText = trim(text);
-            if (mFont.isLoaded() == false) loadFont("/library/Fonts/Arial.ttf", 24);
+            if (mFont.isLoaded() == false) loadFont("/library/Fonts/Arial.ttf", 14);
             
         // parse words //
             int position = mText.find(" ");
@@ -181,8 +194,8 @@ class ofxParagraph{
     
         void loadFont(std::string file, int ptSize)
         {
-            std::cout << "loading font";
-            mFont.loadFont("/library/Fonts/Arial.ttf", 24, true , false, true);
+            std::cout << "loading font : " + file + " at size " << ptSize;
+            mFont.loadFont(file, ptSize);
         }
     
         // trim from start
