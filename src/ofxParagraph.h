@@ -15,26 +15,31 @@
 class ofxParagraph{
     
     public:
-        ofxParagraph(std::string text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.")
-        : mWidth(620)
-        , mColor(ofColor::black)
+    
+        enum alignment { left, center, right };
+    
+        ofxParagraph(std::string text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", int width = 620, alignment align = left)
+        : mColor(ofColor::black)
         , mIndent(60)
         , mSpacing(10)
         , mLeading(40)
         , mPosition(100, 100)
         {
             parse(text);
+            setAlignment(align);
+            setWidth(width);
         };
+    
         void draw()
         {
             ofPushStyle();{
                 ofSetColor(mColor);
-                for(int i=0; i<mLines.size(); i++) {
-                    int x = i == 0 ? mIndent : 0;
-                    for(int j=0; j<mLines[i].size(); j++) {
-                        mFont.drawString(mLines[i][j].text, mPosition.x + x, mPosition.y + (mLeading*i));
-                        x += mLines[i][j].width + mSpacing;
-                    }
+                if (mAlign == left){
+                    drawLeftAligned();
+                }   else if (mAlign == center){
+                    drawCenterAligned();
+                }   else if (mAlign == right){
+                    drawRightAligned();
                 }
             } ofPopStyle();
             ofNoFill();
@@ -69,6 +74,11 @@ class ofxParagraph{
         {
             mPosition = pos;
         }
+        void setAlignment(alignment a)
+        {
+            mAlign = a;
+            layout();
+        }
         void setSpacing(int spacing)
         {
             mSpacing = spacing;
@@ -87,12 +97,14 @@ class ofxParagraph{
         ofColor mColor;
         ofPoint mPosition;
         ofTrueTypeFont mFont;
-        struct word{
+        alignment mAlign;
+        struct word {
             string text;
             int width;
         };
-        vector<word> mWords;
+        vector< word > mWords;
         vector< vector<word> > mLines;
+        vector< int > mLineWidths;
     
         void parse(std::string text)
         {
@@ -116,21 +128,55 @@ class ofxParagraph{
     
         void layout()
         {
-            mLines.clear();
             vector<word> line;
-            int lineWidth = mIndent;
+            mLines.clear();
+            mLineWidths.clear();
+            int lineWidth = mAlign == left ? mIndent : 0;
             for (int i=0; i<mWords.size(); i++) {
                 if (lineWidth + mWords[i].width < mWidth){
                     lineWidth += mWords[i].width + mSpacing;
                     line.push_back(mWords[i]);
                 }   else{
                     mLines.push_back(line);
+                    mLineWidths.push_back(lineWidth);
                     lineWidth = 0;
                     line.clear();
                 }
             }
         // last line //
             mLines.push_back(line);
+            mLineWidths.push_back(lineWidth);
+        }
+    
+        inline void drawLeftAligned()
+        {
+            for(int i=0; i<mLines.size(); i++) {
+                int x = i == 0 ? mIndent : 0;
+                for(int j=0; j<mLines[i].size(); j++) {
+                    mFont.drawString(mLines[i][j].text, mPosition.x + x, mPosition.y + (mLeading*i));
+                    x += mLines[i][j].width + mSpacing;
+                }
+            }
+        }
+        inline void drawCenterAligned()
+        {
+            for(int i=0; i<mLines.size(); i++) {
+                int x = (mWidth-mLineWidths[i])/2;
+                for(int j=0; j<mLines[i].size(); j++) {
+                    mFont.drawString(mLines[i][j].text, mPosition.x + x, mPosition.y + (mLeading*i));
+                    x += mLines[i][j].width + mSpacing;
+                }
+            }
+        }
+        inline void drawRightAligned()
+        {
+            for(int i=0; i<mLines.size(); i++) {
+                int x = mWidth-mLineWidths[i];
+                for(int j=0; j<mLines[i].size(); j++) {
+                    mFont.drawString(mLines[i][j].text, mPosition.x + x, mPosition.y + (mLeading*i));
+                    x += mLines[i][j].width + mSpacing;
+                }
+            }
         }
     
         void loadFont(std::string file, int ptSize)

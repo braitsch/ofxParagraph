@@ -4,7 +4,8 @@
 void ofApp::setup()
 {
     paragraph = new ofxParagraph();
-    paragraph->setWidth(640);
+    paragraph->setPosition(ofPoint(200, 120));
+    paragraph->setAlignment(ofxParagraph::center);
 }
 
 //--------------------------------------------------------------
