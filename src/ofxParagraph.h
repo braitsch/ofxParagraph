@@ -60,7 +60,7 @@ class ofxParagraph{
         }
         void setFont(std::string file, int ptSize)
         {
-            loadFont(file, ptSize);
+            getFont(file, ptSize);
             layout();
         }
         void setColor(ofColor color)
@@ -114,15 +114,22 @@ class ofxParagraph{
             string text;
             int width;
         };
+        struct font {
+            string file;
+            int ptSize;
+            ofTrueTypeFont ttf;
+        };
         vector< word > mWords;
         vector< vector<word> > mLines;
         vector< int > mLineWidths;
+        static vector< font > mFonts;
         static const int BORDER_PADDDING = 10;
     
         void parse(std::string text)
         {
             std::string mText = trim(text);
-            if (mFont.isLoaded() == false) loadFont("/library/Fonts/Arial.ttf", 14);
+        // always ensure we have some default font to draw //
+            if (mFont.isLoaded() == false) getFont("/library/Fonts/Arial.ttf", 14);
             
         // parse words //
             int position = mText.find(" ");
@@ -141,9 +148,9 @@ class ofxParagraph{
     
         void layout()
         {
-            vector<word> line;
             mLines.clear();
             mLineWidths.clear();
+            vector<word> line;
             int lineWidth = mAlign == left ? mIndent : 0;
             for (int i=0; i<mWords.size(); i++) {
                 if (lineWidth + mWords[i].width < mWidth){
@@ -192,10 +199,24 @@ class ofxParagraph{
             }
         }
     
-        void loadFont(std::string file, int ptSize)
+        void getFont(std::string file, int ptSize)
         {
-            std::cout << "loading font : " + file + " at size " << ptSize;
-            mFont.loadFont(file, ptSize);
+            bool cached = false;
+            for (int i=0; i<mFonts.size(); i++) {
+                if (mFonts[i].file == file && mFonts[i].ptSize == ptSize){
+                    cached = true;
+                    mFont = mFonts[i].ttf;
+                    std::cout << "retrieving from cache : " + file + " at size " << ptSize << endl;
+                }
+            }
+            if (!cached){
+                std::cout << "loading font : " + file + " at size " << ptSize << endl;
+                ofTrueTypeFont ttf;
+                ttf.loadFont(file, ptSize);
+                font nFont = {file, ptSize, ttf};
+                mFonts.push_back(nFont);
+                mFont = ttf;
+            }
         }
     
         // trim from start

@@ -1,6 +1,6 @@
 ofxParagraph
 -----------------
-A simple text layout engine for [openFrameworks](http://openframeworks.cc/)
+A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/)
 
 
 ####API
