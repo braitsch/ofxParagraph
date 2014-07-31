@@ -42,7 +42,7 @@ void ofxParagraph::draw()
             ofRect(mPosition.x - mBorderPadding,
                    mPosition.y - mFont.getLineHeight() - mBorderPadding,
                    mWidth + (mBorderPadding * 2),
-                   (mLines.size() * mLeading) + (mBorderPadding*2));
+                   mHeight + (mBorderPadding * 2));
         }
     } ofPopStyle();
 }
@@ -69,6 +69,14 @@ void ofxParagraph::setWidth(int width)
 {
     mWidth = width;
     layout();
+}
+int ofxParagraph::getWidth()
+{
+    return mWidth;
+}
+int ofxParagraph::getHeight()
+{
+    return mHeight;
 }
 void ofxParagraph::setIndent(int indent)
 {
@@ -148,6 +156,7 @@ void ofxParagraph::layout()
     // last line //
     mLines.push_back(line);
     mLineWidths.push_back(lineWidth);
+    mHeight = mLines.size() * mLeading;
 }
 
 inline void ofxParagraph::drawLeftAligned()

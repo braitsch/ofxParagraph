@@ -26,6 +26,8 @@ class ofxParagraph{
         void setColor(int color);
         void setColor(ofColor color);
         void setWidth(int width);
+        int getWidth();
+        int getHeight();
         void setIndent(int indent);
         void setPosition(ofPoint position);
         void setAlignment(alignment align);
@@ -37,6 +39,7 @@ class ofxParagraph{
     
     private:
         int mWidth;
+        int mHeight;
         int mIndent;
         int mLeading;
         int mSpacing;

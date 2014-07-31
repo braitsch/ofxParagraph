@@ -5,45 +5,44 @@ A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/) that
 
 ![image](./img/layout-example.png)
 
-#### API
+#### CONSTRUCTOR
 -----------------
 
-	ofxParagraph paragraph = ofxParagraph(string text, int width)
+	ofxParagraph paragraph = ofxParagraph(string text, int width, ofxParagraph::alignment align)
 
 ------------------------------------------------------------------------------
-*draw the paragraph*
+
+#### PUBLIC METHODS
  
 	void draw()
-------------------------------------------------------------------------------
-*set the text* 
 
 	void setText(string text)
-------------------------------------------------------------------------------
-*set the width* 
+	
+	void setFont(string file, int pointSize) 
 
-	void setWidth(int width)	
-------------------------------------------------------------------------------
-*set the position* 
-
-	void setPosition(ofPoint position)	
-------------------------------------------------------------------------------
-*set the text color*
+	void setWidth(int width)
+	
+	int getWidth()
+	
+	int getHeight()
  
 	void setColor(ofColor color)
-------------------------------------------------------------------------------
-*set the alignment: left, right, center*
+	
+	void setColor(int color) // e.g. 0x333333
  
-	void setAlignment(ofxParagraph::Alignment alignment)
-------------------------------------------------------------------------------
-*set the indentation of the first line*
+	void setAlignment(ofxParagraph::alignment align)
+	
+	void setPosition(ofPoint position)	
  
 	void setIndent(int indent)
-------------------------------------------------------------------------------
-*set the leading between lines*
  
 	void setLeading(int leading)
-------------------------------------------------------------------------------
-*set the pixel spacing between words*
  
 	void setSpacing(int spacing)
+	
+	void drawBorder(bool draw)
+	
+	void drawBorder(ofColor color)
+	
+	void setBorderPadding(int padding)
 
