@@ -1,6 +1,6 @@
 ofxParagraph
 -----------------
-A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/)
+A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/) that allows you to set the alignment, width, indentation, leading and pixel based word spacing of paragraphs. It also supports font caching.
 
 
 ![image](./img/layout-example.png)
