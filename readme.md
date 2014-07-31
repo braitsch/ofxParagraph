@@ -3,7 +3,9 @@ ofxParagraph
 A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/)
 
 
-####API
+![image](./img/layout-example.png)
+
+#### API
 -----------------
 
 	ofxParagraph paragraph = ofxParagraph(string text, int width)

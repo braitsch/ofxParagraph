@@ -13,4 +13,5 @@ class ofApp : public ofBaseApp{
         ofxParagraph* p2;
         ofxParagraph* p3;
     
+        ofTrueTypeFont label;
 };
