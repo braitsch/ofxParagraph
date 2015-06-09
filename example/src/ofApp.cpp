@@ -6,27 +6,28 @@ void ofApp::setup()
     p1 = new ofxParagraph();
     p1->setWidth(340);
     p1->setColor(ofColor::darkGrey);
-    p1->setPosition(ofPoint(100, 120));
-    p1->setAlignment(ofxParagraph::left);
     p1->drawBorder(ofColor::darkGrey);
+    p1->setPosition(ofPoint(100, 120));
+    p1->setAlignment(ofxParagraph::ALIGN_LEFT);
     
     p2 = new ofxParagraph();
     p2->setWidth(340);
     p2->setColor(ofColor::darkGrey);
     p2->drawBorder(ofColor::darkGrey);
     p2->setPosition(ofPoint(500, 120));
-    p2->setAlignment(ofxParagraph::center);
+    p2->setAlignment(ofxParagraph::ALIGN_CENTER);
     
     p3 = new ofxParagraph();
     p3->setWidth(340);
     p3->setColor(ofColor::darkGrey);
     p3->drawBorder(ofColor::darkGrey);
     p3->setPosition(ofPoint(900, 120));
-    p3->setAlignment(ofxParagraph::right);
+    p3->setAlignment(ofxParagraph::ALIGN_RIGHT);
 
+// draw a label above each paragraph //
     ofSetHexColor(0x666666);
     ofBackground(ofColor::white);
-    label.loadFont("HelveticaNeueLTStd-Md.otf", 14);
+    label.loadFont(ofxParagraph::Helvetica, 14);
 }
 
 //--------------------------------------------------------------
