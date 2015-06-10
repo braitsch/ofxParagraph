@@ -14,12 +14,15 @@ string ofxParagraph::Helvetica = "HelveticaNeueLTStd-Md.otf";
 ofxParagraph::ofxParagraph(std::string text, int width, alignment align)
 : mColor(ofColor::black)
 , mIndent(40)
-, mSpacing(10)
-, mLeading(28)
+, mSpacing(6)
+, mLeading(6)
 , mPosition(100, 100)
 , bDrawBorder(false)
 , mBorderColor(ofColor::black)
 , mBorderPadding(15)
+, bDrawWordBoundaries(false)
+, mWordBoundaryPadding(2)
+, mWordBoundaryColor(ofColor::red)
 {
     setText(text);
     setAlignment(align);
@@ -33,12 +36,18 @@ void ofxParagraph::draw()
     if (bRender) render();
     ofPushStyle();{
         ofSetColor(mColor);
-        if (mAlign == ALIGN_LEFT){
-            drawLeftAligned();
-        }   else if (mAlign == ALIGN_CENTER){
-            drawCenterAligned();
-        }   else if (mAlign == ALIGN_RIGHT){
-            drawRightAligned();
+        for (int i=0; i<mWords.size(); i++) {
+            mFont.drawString(mWords[i].text, mPosition.x + mWords[i].rect.x, mPosition.y + mWords[i].rect.y);
+            if (bDrawWordBoundaries == true){
+                ofPushStyle();
+                ofNoFill();
+                ofSetColor(mWordBoundaryColor);
+                ofRect(mPosition.x + mWords[i].rect.x - mWordBoundaryPadding,
+                       mPosition.y + mWords[i].rect.y-mLineHeight - mWordBoundaryPadding,
+                       mWords[i].rect.width + (mWordBoundaryPadding * 2),
+                       mLineHeight + (mWordBoundaryPadding * 2));
+                ofPopStyle();
+            }
         }
         if (bDrawBorder == true){
             ofNoFill();
@@ -147,75 +156,75 @@ void ofxParagraph::setBorderPadding(int padding)
     mBorderPadding = padding;
 }
 
+void ofxParagraph::drawWordBoundaries(bool draw)
+{
+    bDrawWordBoundaries = draw;
+}
+
 void ofxParagraph::render()
 {
     mWords.clear();
+    mLineHeight = 0;
 // break paragraph into words //
     int position = mText.find(" ");
     while ( position != string::npos )
     {
         string s = mText.substr(0, position);
-        word w = {s, mFont.getStringBoundingBox(s, 0, 0).width};
+        word w = {s, mFont.getStringBoundingBox(s, 0, 0)};
         mWords.push_back(w);
         mText.erase(0, position + 1);
         position = mText.find(" ");
+        if (w.rect.height > mLineHeight) mLineHeight = w.rect.height;
     }
 // append the last word //
-    word w = {mText, mFont.getStringBoundingBox(mText, 0, 0).width};
+    word w = {mText, mFont.getStringBoundingBox(mText, 0, 0)};
     mWords.push_back(w);
+    if (w.rect.height > mLineHeight) mLineHeight = w.rect.height;
     
-// calculate number of words per line //
+// assign words to lines //
+    int y = 0;
+    int x = mAlign == ALIGN_LEFT ? mIndent : 0;
     mLines.clear();
-    mLineWidths.clear();
-    vector<word> line;
-    int lineWidth = mAlign == ALIGN_LEFT ? mIndent : 0;
+    vector<word*> line;
     for (int i=0; i<mWords.size(); i++) {
-        if (lineWidth + mWords[i].width < mWidth){
-            lineWidth += mWords[i].width + mSpacing;
-            line.push_back(mWords[i]);
+        if (x + mWords[i].rect.width < mWidth){
+            mWords[i].rect.x = x;
+            mWords[i].rect.y = y;
+            x += mWords[i].rect.width + mSpacing;
+            line.push_back(&mWords[i]);
         }   else{
+            y+= mLineHeight + mLeading;
+            mWords[i].rect.x = 0;
+            mWords[i].rect.y = y;
+            x = mWords[i].rect.width + mSpacing;
             mLines.push_back(line);
-            mLineWidths.push_back(lineWidth);
-            lineWidth = 0;
             line.clear();
+            line.push_back(&mWords[i]);
         }
     }
 // append the last line //
     mLines.push_back(line);
-    mLineWidths.push_back(lineWidth);
-    mHeight = mLines.size() * mLeading;
+    mHeight = mLines.size() * (mLineHeight + mLeading);
+    
+// reposition words for right & center aligned paragraphs //
+    if (mAlign == ALIGN_CENTER){
+        for(int i=0; i<mLines.size(); i++) {
+            int lineWidth = 0;
+            for(int j=0; j<mLines[i].size(); j++) {
+                lineWidth+= mLines[i][j]->rect.width;
+            }
+            lineWidth+= mSpacing * (mLines[i].size()-1);
+        // calculate the amount each word should move over //
+            int offset = (mWidth - lineWidth) / 2;
+            for(int j=0; j<mLines[i].size(); j++) mLines[i][j]->rect.x += offset;
+        }
+    }   else if (mAlign == ALIGN_RIGHT){
+        for(int i=0; i<mLines.size(); i++) {
+            word* lword = mLines[i].back();
+        // calculate the distance the last word in each line is from the right boundary //
+            int offset = mWidth - (lword->rect.x + lword->rect.width);
+            for(int j=0; j<mLines[i].size(); j++) mLines[i][j]->rect.x += offset;
+        }
+    }
     bRender = false;
-}
-
-inline void ofxParagraph::drawLeftAligned()
-{
-    for(int i=0; i<mLines.size(); i++) {
-        int x = i == 0 ? mIndent : 0;
-        for(int j=0; j<mLines[i].size(); j++) {
-            mFont.drawString(mLines[i][j].text, mPosition.x + x, mPosition.y + (mLeading*i));
-            x += mLines[i][j].width + mSpacing;
-        }
-    }
-}
-
-inline void ofxParagraph::drawCenterAligned()
-{
-    for(int i=0; i<mLines.size(); i++) {
-        int x = mSpacing/2 + (mWidth-mLineWidths[i])/2;
-        for(int j=0; j<mLines[i].size(); j++) {
-            mFont.drawString(mLines[i][j].text, mPosition.x + x, mPosition.y + (mLeading*i));
-            x += mLines[i][j].width + mSpacing;
-        }
-    }
-}
-
-inline void ofxParagraph::drawRightAligned()
-{
-    for(int i=0; i<mLines.size(); i++) {
-        int x = mWidth-mLineWidths[i] + mSpacing;
-        for(int j=0; j<mLines[i].size(); j++) {
-            mFont.drawString(mLines[i][j].text, mPosition.x + x, mPosition.y + (mLeading*i));
-            x += mLines[i][j].width + mSpacing;
-        }
-    }
 }

@@ -9,6 +9,7 @@ void ofApp::setup()
     p1->drawBorder(ofColor::darkGrey);
     p1->setPosition(ofPoint(100, 120));
     p1->setAlignment(ofxParagraph::ALIGN_LEFT);
+    p1->drawWordBoundaries();
     
     p2 = new ofxParagraph();
     p2->setWidth(340);

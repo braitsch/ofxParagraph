@@ -19,7 +19,7 @@ class ofxParagraph{
         static string Helvetica;
         enum alignment { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
     
-        ofxParagraph(std::string text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", int width = 620, alignment align = ALIGN_LEFT);
+    ofxParagraph(std::string text = "Stumptown street art photo booth try-hard cold-pressed, pour-over raw denim four loko vinyl. Banjo drinking vinegar tousled, Brooklyn Neutra meggings mlkshk freegan whatever. Authentic drinking vinegar next level Portland tattooed, street art mixtape. Butcher High Life Brooklyn bicycle rights. Cardigan iPhone stumptown 90's, Carles Neutra viral Brooklyn ugh disrupt. Truffaut Williamsburg sriracha four dollar toast bicycle rights four loko. Migas Odd Future disrupt DIY polaroid whatever.", int width = 620, alignment align = ALIGN_LEFT);
     
         void draw();
         void setText(std::string text);
@@ -37,6 +37,7 @@ class ofxParagraph{
         void drawBorder(bool draw);
         void drawBorder(ofColor color);
         void setBorderPadding(int padding);
+        void drawWordBoundaries(bool draw = true);
     
     private:
         int mWidth;
@@ -44,6 +45,7 @@ class ofxParagraph{
         int mIndent;
         int mLeading;
         int mSpacing;
+        int mLineHeight;
         string mText;
         ofColor mColor;
         ofPoint mPosition;
@@ -53,9 +55,12 @@ class ofxParagraph{
         bool bDrawBorder;
         ofColor mBorderColor;
         int mBorderPadding;
+        bool bDrawWordBoundaries;
+        int mWordBoundaryPadding;
+        ofColor mWordBoundaryColor;
         struct word {
             string text;
-            int width;
+            ofRectangle rect;
         };
         struct font {
             string file;
@@ -63,8 +68,7 @@ class ofxParagraph{
             ofTrueTypeFont ttf;
         };
         vector< word > mWords;
-        vector< vector<word> > mLines;
-        vector< int > mLineWidths;
+        vector< vector<word*> > mLines;
         static vector< font > mFonts;
     
         void render();

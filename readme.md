@@ -46,3 +46,5 @@ A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/) that
 	
 	void setBorderPadding(int padding)
 
+	void drawWordBoundaries(bool draw)
+
