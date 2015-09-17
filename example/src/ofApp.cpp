@@ -1,43 +1,81 @@
+
+//
+//  ofxParagraphExample
+//
+//  Created by Stephen Braitsch on 9/17/15
+//  https://github.com/braitsch/ofxParagraph
+//
+
 #include "ofApp.h"
 
-//--------------------------------------------------------------
 void ofApp::setup()
 {
-    p1 = new ofxParagraph();
-    p1->setWidth(340);
-    p1->setColor(ofColor::darkGrey);
-    p1->drawBorder(ofColor::darkGrey);
-    p1->setPosition(ofPoint(100, 120));
-    p1->setAlignment(ofxParagraph::ALIGN_LEFT);
-    p1->drawWordBoundaries();
-    
-    p2 = new ofxParagraph();
-    p2->setWidth(340);
-    p2->setColor(ofColor::darkGrey);
-    p2->drawBorder(ofColor::darkGrey);
-    p2->setPosition(ofPoint(500, 120));
-    p2->setAlignment(ofxParagraph::ALIGN_CENTER);
-    
-    p3 = new ofxParagraph();
-    p3->setWidth(340);
-    p3->setColor(ofColor::darkGrey);
-    p3->drawBorder(ofColor::darkGrey);
-    p3->setPosition(ofPoint(900, 120));
-    p3->setAlignment(ofxParagraph::ALIGN_RIGHT);
-
-// draw a label above each paragraph //
-    ofSetHexColor(0x666666);
     ofBackground(ofColor::white);
-    label.loadFont(ofxParagraph::Helvetica, 14);
+    ofSetFullscreen(true);
+
+// create three paragraphs with different alignments //
+    for (int i=0; i<3; i++) {
+        ofxParagraph* p = new ofxParagraph();
+        p->setColor(ofColor::darkGrey);
+        p->drawBorder(ofColor::darkGrey);
+        if (i==0){
+// let's draw the boundaries in the first paragraph //
+            p->drawWordBoundaries();
+            p->setAlignment(ofxParagraph::ALIGN_LEFT);
+        }   else if (i==1){
+            p->setAlignment(ofxParagraph::ALIGN_CENTER);
+        }   else if (i==2){
+            p->setAlignment(ofxParagraph::ALIGN_RIGHT);
+        }
+        paragraphs.push_back(p);
+    }
+
+// change these to whatever you want //
+    int pWidth = 340;
+    int pFontSize = 14;
+    float pPadding = pWidth*.30;
+
+// check for high resolution display //
+    if (ofGetScreenWidth()>=2560 && ofGetScreenHeight()>=1600)
+    {
+        pWidth*=2;
+        pFontSize*=2;
+    }
+    
+// load our font and layout our paragraphs //
+    label.load(ofxParagraph::Helvetica, pFontSize);
+    int pLeading = pFontSize*.65;
+    int tWidth = paragraphs.size()*pWidth + (paragraphs.size()-1)*pPadding;
+    
+    int x = (ofGetWidth() - tWidth)/2;
+    for (int i=0; i<paragraphs.size(); i++){
+        paragraphs[i]->setWidth(pWidth);
+        paragraphs[i]->setLeading(pLeading);
+        paragraphs[i]->setFontSize(pFontSize);
+        paragraphs[i]->setPosition(x+((pWidth+pPadding)*i), ofGetHeight()/2 - paragraphs[i]->getHeight()/2);
+    }
+    
 }
 
-//--------------------------------------------------------------
 void ofApp::draw()
 {
-    p1->draw();
-    p2->draw();
-    p3->draw();
-    label.drawString("LEFT ALIGNED", 100 + (340 - label.getStringBoundingBox("LEFT ALIGNED", 0, 0).width)/2, 60);
-    label.drawString("CENTER ALIGNED", 500 + (340 - label.getStringBoundingBox("CENTER ALIGNED", 0, 0).width)/2, 60);
-    label.drawString("RIGHT ALIGNED", 900 + (340 - label.getStringBoundingBox("RIGHT ALIGNED", 0, 0).width)/2, 60);
+//  draw the paragraphs //
+    for (int i=0; i<paragraphs.size(); i++){
+        paragraphs[i]->draw();
+    // and a label above each one //
+        string s;
+        switch (i) {
+            case 0: s="LEFT ALIGNED"; break;
+            case 1: s="CENTER ALIGNED"; break;
+            case 2: s="RIGHT ALIGNED"; break;
+        }
+        ofPushStyle();
+            ofSetHexColor(0x666666);
+            label.drawString(s, paragraphs[i]->x + (paragraphs[i]->getWidth() - label.getStringBoundingBox(s, 0, 0).width)/2, paragraphs[i]->y-100);
+        ofPopStyle();
+    }
 }
+
+
+
+

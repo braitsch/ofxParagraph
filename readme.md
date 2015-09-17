@@ -3,7 +3,7 @@ ofxParagraph
 A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/) that allows you to set the alignment, width, indentation, leading and pixel based word spacing of paragraphs. It also supports font caching.
 
 
-![image](./img/layout-example.png)
+![image](./readme-img/layout-example.png)
 
 #### CONSTRUCTOR
 -----------------
@@ -18,9 +18,13 @@ A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/) that
 
 	void setText(string text)
 	
-	void setFont(string file, int pointSize) 
-
 	void setWidth(int width)
+	
+	void setFont(string file, int pointSize)
+	
+	void setFontSize(int size)
+	
+	void setFontFile(string file)
 	
 	int getWidth()
 	
@@ -32,7 +36,7 @@ A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/) that
  
 	void setAlignment(ofxParagraph::alignment align)
 	
-	void setPosition(ofPoint position)	
+	void setPosition(int x, int y)	
  
 	void setIndent(int indent)
  

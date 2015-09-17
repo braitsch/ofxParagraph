@@ -1,42 +1,74 @@
-//
-//  ofxParagraph.h
-//  ofxParagraphExample
-//
-//  Created by Stephen Braitsch on 7/29/14.
-//
-//
+
+/*
+    Copyright (C) 2014 Stephen Braitsch [http://braitsch.io]
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+*/
 
 #pragma once
-#include <vector>
-#include <iostream>
 #include <ofGraphics.h>
 #include <ofTrueTypeFont.h>
+
+class ofxParagraphFont : public ofTrueTypeFont {
+
+    public:
+        ofxParagraphFont(string file, int size)
+        {
+            this->file = file;
+            this->size = size;
+            this->load(file, size);
+        }
+        int size;
+        string file;
+};
 
 class ofxParagraph{
     
     public:
-    
         static string Helvetica;
         enum alignment { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
     
     ofxParagraph(std::string text = "Stumptown street art photo booth try-hard cold-pressed, pour-over raw denim four loko vinyl. Banjo drinking vinegar tousled, Brooklyn Neutra meggings mlkshk freegan whatever. Authentic drinking vinegar next level Portland tattooed, street art mixtape. Butcher High Life Brooklyn bicycle rights. Cardigan iPhone stumptown 90's, Carles Neutra viral Brooklyn ugh disrupt. Truffaut Williamsburg sriracha four dollar toast bicycle rights four loko. Migas Odd Future disrupt DIY polaroid whatever.", int width = 620, alignment align = ALIGN_LEFT);
     
-        void draw();
+        int x;
+        int y;
+    
         void setText(std::string text);
         void setFont(std::string file, int ptSize);
+        void setFontSize(int size);
+        void setFontFile(string file);
         void setColor(int color);
         void setColor(ofColor color);
         void setWidth(int width);
-        int getWidth();
-        int getHeight();
         void setIndent(int indent);
-        void setPosition(ofPoint position);
+        void setPosition(int x, int y);
         void setAlignment(alignment align);
         void setSpacing(int spacing);
         void setLeading(int leading);
+        void setBorderPadding(int padding);
+    
+        int getWidth();
+        int getHeight();
+    
+        void draw();
         void drawBorder(bool draw);
         void drawBorder(ofColor color);
-        void setBorderPadding(int padding);
         void drawWordBoundaries(bool draw = true);
     
     private:
@@ -47,11 +79,12 @@ class ofxParagraph{
         int mSpacing;
         int mLineHeight;
         string mText;
+        int mFontSize;
+        string mFontFile;
         ofColor mColor;
-        ofPoint mPosition;
-        ofTrueTypeFont mFont;
         alignment mAlign;
-        bool bRender;
+        ofxParagraphFont* mFont;
+
         bool bDrawBorder;
         ofColor mBorderColor;
         int mBorderPadding;
@@ -62,14 +95,9 @@ class ofxParagraph{
             string text;
             ofRectangle rect;
         };
-        struct font {
-            string file;
-            int ptSize;
-            ofTrueTypeFont ttf;
-        };
         vector< word > mWords;
         vector< vector<word*> > mLines;
-        static vector< font > mFonts;
+        static vector< ofxParagraphFont* > mFonts;
     
         void render();
         inline void drawLeftAligned();
