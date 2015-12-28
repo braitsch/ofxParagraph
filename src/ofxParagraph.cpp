@@ -23,16 +23,14 @@
 
 #include "ofxParagraph.h"
 
-vector< ofxParagraphFont* > ofxParagraph::mFonts;
-string ofxParagraph::Helvetica = "HelveticaNeueLTStd-Md.otf";
+vector< ofxParagraph::font > ofxParagraph::mFonts;
 
 ofxParagraph::ofxParagraph(std::string text, int width, alignment align)
-: mColor(ofColor::black)
+: mFont(nullptr)
+, mColor(ofColor::black)
 , mIndent(40)
 , mSpacing(6)
 , mLeading(16)
-, mFontSize(14)
-, mFontFile(Helvetica)
 , bDrawBorder(false)
 , mBorderColor(ofColor::black)
 , mBorderPadding(15)
@@ -40,10 +38,10 @@ ofxParagraph::ofxParagraph(std::string text, int width, alignment align)
 , mWordBoundaryPadding(2)
 , mWordBoundaryColor(ofColor::red)
 {
-    mFont = nullptr;
     setText(text);
     setAlignment(align);
     setWidth(width);
+    setFont("HelveticaNeueLTStd-Md.otf", 14);
 };
 
 void ofxParagraph::draw()
@@ -92,6 +90,12 @@ int ofxParagraph::getWidth()
 int ofxParagraph::getHeight()
 {
     return mHeight;
+}
+
+int ofxParagraph::getStringHeight(string s)
+{
+    if (s == "") s = "ABCDEFGHIJKLMNOPQWXYZ1234567890";
+    return mFont->getStringBoundingBox(s, 0, 0).height;
 }
 
 void ofxParagraph::setPosition(int x, int y)
@@ -173,31 +177,36 @@ void ofxParagraph::setFontSize(int size)
     setFont(mFontFile, mFontSize);
 }
 
+void ofxParagraph::setFont(std::shared_ptr<ofTrueTypeFont> ttf)
+{
+    mFont = ttf;
+    render();
+}
+
 void ofxParagraph::setFont(std::string file, int size)
 {
     mFontFile = file;
     mFontSize = size;
     bool cached = false;
     for (int i=0; i<mFonts.size(); i++) {
-        if (mFonts[i]->file == file && mFonts[i]->size == size){
+        if (mFonts[i].file == file && mFonts[i].size == size){
             cached = true;
-            mFont = mFonts[i];
+            mFont = mFonts[i].ttf;
             std::cout << "retrieving from cache : " + file + " at size " << size << endl;
         }
     }
     if (!cached){
         std::cout << "loading font : " + file + " at size " << size << endl;
-        ofxParagraphFont* f = new ofxParagraphFont(file, size);
-        mFont = f;
+        font f = font(file, size);
         mFonts.push_back(f);
+        mFont = f.ttf;
     }
     render();
 }
 
 void ofxParagraph::render()
 {
-    if (mFont == nullptr) return;
-
+    if (mFont == nullptr || mFont->isLoaded() == false) return;
     mWords.clear();
     mLineHeight = 0;
     string str = mText;

@@ -22,6 +22,8 @@ A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/) that
 	
 	void setFont(string file, int pointSize)
 	
+	void setFont(std::shared_ptr<ofTrueTypeFont> font)
+	
 	void setFontSize(int size)
 	
 	void setFontFile(string file)
@@ -29,6 +31,8 @@ A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/) that
 	int getWidth()
 	
 	int getHeight()
+	
+	int getStringHeight(string s = "")
  
 	void setColor(ofColor color)
 	
@@ -36,7 +40,7 @@ A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/) that
  
 	void setAlignment(ofxParagraph::alignment align)
 	
-	void setPosition(int x, int y)	
+	void setPosition(int x, int y)
  
 	void setIndent(int indent)
  
@@ -51,4 +55,3 @@ A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/) that
 	void setBorderPadding(int padding)
 
 	void drawWordBoundaries(bool draw)
-

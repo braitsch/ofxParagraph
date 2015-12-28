@@ -25,32 +25,20 @@
 #include <ofGraphics.h>
 #include <ofTrueTypeFont.h>
 
-class ofxParagraphFont : public ofTrueTypeFont {
-
-    public:
-        ofxParagraphFont(string file, int size)
-        {
-            this->file = file;
-            this->size = size;
-            this->load(file, size);
-        }
-        int size;
-        string file;
-};
-
 class ofxParagraph{
     
     public:
-        static string Helvetica;
+
         enum alignment { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
     
-    ofxParagraph(std::string text = "Stumptown street art photo booth try-hard cold-pressed, pour-over raw denim four loko vinyl. Banjo drinking vinegar tousled, Brooklyn Neutra meggings mlkshk freegan whatever. Authentic drinking vinegar next level Portland tattooed, street art mixtape. Butcher High Life Brooklyn bicycle rights. Cardigan iPhone stumptown 90's, Carles Neutra viral Brooklyn ugh disrupt. Truffaut Williamsburg sriracha four dollar toast bicycle rights four loko. Migas Odd Future disrupt DIY polaroid whatever.", int width = 620, alignment align = ALIGN_LEFT);
+        ofxParagraph(std::string text = "Stumptown street art photo booth try-hard cold-pressed, pour-over raw denim four loko vinyl. Banjo drinking vinegar tousled, Brooklyn Neutra meggings mlkshk freegan whatever. Authentic drinking vinegar next level Portland tattooed, street art mixtape. Butcher High Life Brooklyn bicycle rights. Cardigan iPhone stumptown 90's, Carles Neutra viral Brooklyn ugh disrupt. Truffaut Williamsburg sriracha four dollar toast bicycle rights four loko. Migas Odd Future disrupt DIY polaroid whatever.", int width = 620, alignment align = ALIGN_LEFT);
     
         int x;
         int y;
     
         void setText(std::string text);
         void setFont(std::string file, int ptSize);
+        void setFont(std::shared_ptr<ofTrueTypeFont> font);
         void setFontSize(int size);
         void setFontFile(string file);
         void setColor(int color);
@@ -65,6 +53,7 @@ class ofxParagraph{
     
         int getWidth();
         int getHeight();
+        int getStringHeight(string str = "");
     
         void draw();
         void drawBorder(bool draw);
@@ -72,6 +61,7 @@ class ofxParagraph{
         void drawWordBoundaries(bool draw = true);
     
     private:
+    
         int mWidth;
         int mHeight;
         int mIndent;
@@ -83,7 +73,8 @@ class ofxParagraph{
         string mFontFile;
         ofColor mColor;
         alignment mAlign;
-        ofxParagraphFont* mFont;
+    
+        std::shared_ptr<ofTrueTypeFont> mFont;
 
         bool bDrawBorder;
         ofColor mBorderColor;
@@ -91,13 +82,28 @@ class ofxParagraph{
         bool bDrawWordBoundaries;
         int mWordBoundaryPadding;
         ofColor mWordBoundaryColor;
+    
+        struct font{
+            int size;
+            string file;
+            std::shared_ptr<ofTrueTypeFont> ttf;
+            font(string f, int s){
+                file = f;
+                size = s;
+                ttf = std::make_shared<ofTrueTypeFont>();
+                ttf->load(f, s);
+            }
+        };
+    
         struct word {
             string text;
             ofRectangle rect;
         };
+    
         vector< word > mWords;
         vector< vector<word*> > mLines;
-        static vector< ofxParagraphFont* > mFonts;
+    
+        static vector< ofxParagraph::font > mFonts;
     
         void render();
         inline void drawLeftAligned();

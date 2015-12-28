@@ -43,7 +43,7 @@ void ofApp::setup()
     }
     
 // load our font and layout our paragraphs //
-    label.load(ofxParagraph::Helvetica, pFontSize);
+    label.load("HelveticaNeueLTStd-Md.otf", pFontSize);
     int pLeading = pFontSize*.65;
     int tWidth = paragraphs.size()*pWidth + (paragraphs.size()-1)*pPadding;
     
