@@ -69,6 +69,13 @@ void ofxParagraph::draw()
     ofPopStyle();
 }
 
+void ofxParagraph::draw(int x, int y)
+{
+    this->x = x;
+    this->y = y;
+    draw();
+}
+
 void ofxParagraph::setColor(ofColor color)
 {
     mColor = color;
@@ -162,15 +169,15 @@ void ofxParagraph::setAlignment(alignment align)
     render();
 }
 
-void ofxParagraph::setFont(std::shared_ptr<ofxSmartFont> ttf)
+void ofxParagraph::setFont(shared_ptr<ofxSmartFont> ttf)
 {
     mFont = ttf;
     render();
 }
 
-void ofxParagraph::setFont(std::string file, int size)
+void ofxParagraph::setFont(string file, int size, string name)
 {
-    mFont = ofxSmartFont::add(file, size);
+    mFont = ofxSmartFont::add(file, size, name);
     render();
 }
 

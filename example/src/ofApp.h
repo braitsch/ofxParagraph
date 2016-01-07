@@ -16,7 +16,7 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void draw();
     
-        shared_ptr<ofxSmartFont> font;
+        shared_ptr<ofxSmartFont> label;
         vector<ofxParagraph*> paragraphs;
 
 };

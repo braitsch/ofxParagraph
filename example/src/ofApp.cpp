@@ -16,8 +16,8 @@ void ofApp::setup()
 // create three paragraphs with different alignments //
     for (int i=0; i<3; i++) {
         ofxParagraph* p = new ofxParagraph();
-        p->setColor(ofColor::darkGrey);
-        p->drawBorder(ofColor::darkGrey);
+        p->setColor(ofColor::fromHex(0x555555));
+        p->drawBorder(ofColor::fromHex(0x777777));
         if (i==0){
 // let's draw the boundaries in the first paragraph //
             p->drawWordBoundaries();
@@ -42,8 +42,12 @@ void ofApp::setup()
         pFontSize*=2;
     }
     
-// load our font and layout our paragraphs //
-    font = ofxSmartFont::add("ofxbraitsch/fonts/HelveticaNeueLTStd-Md.otf", pFontSize);
+// load our fonts and layout our paragraphs //
+    label = ofxSmartFont::add("raleway/Raleway-Thin.ttf", pFontSize*2, "raleway-thin");
+    paragraphs[0]->setFont(ofxSmartFont::add("raleway/Raleway-Medium.ttf", pFontSize, "raleway-medium"));
+    paragraphs[1]->setFont(ofxSmartFont::add("raleway/Raleway-Italic.ttf", pFontSize, "raleway-italic"));
+    paragraphs[2]->setFont(ofxSmartFont::add("raleway/Raleway-SemiBoldItalic.ttf", pFontSize, "raleway-semi-bi"));
+    ofxSmartFont::list();
     
     int pLeading = pFontSize*.65;
     int tWidth = paragraphs.size()*pWidth + (paragraphs.size()-1)*pPadding;
@@ -51,9 +55,10 @@ void ofApp::setup()
     int x = (ofGetWidth() - tWidth)/2;
     for (int i=0; i<paragraphs.size(); i++){
         paragraphs[i]->setWidth(pWidth);
-        paragraphs[i]->setFont(font);
         paragraphs[i]->setLeading(pLeading);
-        paragraphs[i]->setPosition(x+((pWidth+pPadding)*i), ofGetHeight()/2 - paragraphs[i]->getHeight()/2);
+        paragraphs[i]->setSpacing(pFontSize*.7);
+        paragraphs[i]->setBorderPadding(30);
+        paragraphs[i]->setPosition(x+((pWidth+pPadding)*i), ofGetHeight()/2 - paragraphs[0]->getHeight()/2);
     }
     
 }
@@ -72,7 +77,7 @@ void ofApp::draw()
         }
         ofPushStyle();
             ofSetHexColor(0x666666);
-            font->draw(s, paragraphs[i]->x + (paragraphs[i]->getWidth()/2 - font->width(s)/2), paragraphs[i]->y-100);
+            label->draw(s, paragraphs[i]->x + (paragraphs[i]->getWidth()/2 - label->width(s)/2), paragraphs[i]->y-100);
         ofPopStyle();
     }
 }
