@@ -22,11 +22,7 @@ A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/) that
 	
 	void setFont(string file, int pointSize)
 	
-	void setFont(std::shared_ptr<ofTrueTypeFont> font)
-	
-	void setFontSize(int size)
-	
-	void setFontFile(string file)
+	void setFont(std::shared_ptr<ofxSmartFont> font)
 	
 	int getWidth()
 	

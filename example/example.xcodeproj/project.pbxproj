@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A3FB1191C3E307000816F0B /* ofxSmartFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FB1171C3E307000816F0B /* ofxSmartFont.cpp */; };
 		8A963F901BAB2854009FE486 /* ofxParagraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A963F8E1BAB2854009FE486 /* ofxParagraph.cpp */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
@@ -43,6 +44,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8A3FB1171C3E307000816F0B /* ofxSmartFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSmartFont.cpp; sourceTree = "<group>"; };
+		8A3FB1181C3E307000816F0B /* ofxSmartFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSmartFont.h; sourceTree = "<group>"; };
 		8A963F8E1BAB2854009FE486 /* ofxParagraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxParagraph.cpp; sourceTree = "<group>"; };
 		8A963F8F1BAB2854009FE486 /* ofxParagraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxParagraph.h; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
@@ -67,6 +70,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8A3FB1161C3E307000816F0B /* ofxSmartFont */ = {
+			isa = PBXGroup;
+			children = (
+				8A3FB1171C3E307000816F0B /* ofxSmartFont.cpp */,
+				8A3FB1181C3E307000816F0B /* ofxSmartFont.h */,
+			);
+			name = ofxSmartFont;
+			path = ../modules/src;
+			sourceTree = "<group>";
+		};
 		8A963F8D1BAB2854009FE486 /* ofxParagraph */ = {
 			isa = PBXGroup;
 			children = (
@@ -80,6 +93,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				8A3FB1161C3E307000816F0B /* ofxSmartFont */,
 				8A963F8D1BAB2854009FE486 /* ofxParagraph */,
 			);
 			name = addons;
@@ -211,6 +225,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A3FB1191C3E307000816F0B /* ofxSmartFont.cpp in Sources */,
 				8A963F901BAB2854009FE486 /* ofxParagraph.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,

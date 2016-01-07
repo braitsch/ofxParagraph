@@ -43,15 +43,16 @@ void ofApp::setup()
     }
     
 // load our font and layout our paragraphs //
-    label.load("HelveticaNeueLTStd-Md.otf", pFontSize);
+    font = ofxSmartFont::add("ofxbraitsch/fonts/HelveticaNeueLTStd-Md.otf", pFontSize);
+    
     int pLeading = pFontSize*.65;
     int tWidth = paragraphs.size()*pWidth + (paragraphs.size()-1)*pPadding;
     
     int x = (ofGetWidth() - tWidth)/2;
     for (int i=0; i<paragraphs.size(); i++){
         paragraphs[i]->setWidth(pWidth);
+        paragraphs[i]->setFont(font);
         paragraphs[i]->setLeading(pLeading);
-        paragraphs[i]->setFontSize(pFontSize);
         paragraphs[i]->setPosition(x+((pWidth+pPadding)*i), ofGetHeight()/2 - paragraphs[i]->getHeight()/2);
     }
     
@@ -65,13 +66,13 @@ void ofApp::draw()
     // and a label above each one //
         string s;
         switch (i) {
-            case 0: s="LEFT ALIGNED"; break;
-            case 1: s="CENTER ALIGNED"; break;
-            case 2: s="RIGHT ALIGNED"; break;
+            case 0: s = "LEFT ALIGNED"; break;
+            case 1: s = "CENTER ALIGNED"; break;
+            case 2: s = "RIGHT ALIGNED"; break;
         }
         ofPushStyle();
             ofSetHexColor(0x666666);
-            label.drawString(s, paragraphs[i]->x + (paragraphs[i]->getWidth() - label.getStringBoundingBox(s, 0, 0).width)/2, paragraphs[i]->y-100);
+            font->draw(s, paragraphs[i]->x + (paragraphs[i]->getWidth()/2 - font->width(s)/2), paragraphs[i]->y-100);
         ofPopStyle();
     }
 }

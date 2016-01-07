@@ -23,7 +23,7 @@
 
 #pragma once
 #include <ofGraphics.h>
-#include <ofTrueTypeFont.h>
+#include "ofxSmartFont.h"
 
 class ofxParagraph{
     
@@ -38,11 +38,11 @@ class ofxParagraph{
     
         void setText(std::string text);
         void setFont(std::string file, int ptSize);
-        void setFont(std::shared_ptr<ofTrueTypeFont> font);
-        void setFontSize(int size);
-        void setFontFile(string file);
+        void setFont(std::shared_ptr<ofxSmartFont> font);
+    
         void setColor(int color);
         void setColor(ofColor color);
+    
         void setWidth(int width);
         void setIndent(int indent);
         void setPosition(int x, int y);
@@ -69,12 +69,10 @@ class ofxParagraph{
         int mSpacing;
         int mLineHeight;
         string mText;
-        int mFontSize;
-        string mFontFile;
         ofColor mColor;
-        alignment mAlign;
+        alignment mAlignment;
     
-        std::shared_ptr<ofTrueTypeFont> mFont;
+        std::shared_ptr<ofxSmartFont> mFont;
 
         bool bDrawBorder;
         ofColor mBorderColor;
@@ -83,18 +81,6 @@ class ofxParagraph{
         int mWordBoundaryPadding;
         ofColor mWordBoundaryColor;
     
-        struct font{
-            int size;
-            string file;
-            std::shared_ptr<ofTrueTypeFont> ttf;
-            font(string f, int s){
-                file = f;
-                size = s;
-                ttf = std::make_shared<ofTrueTypeFont>();
-                ttf->load(f, s);
-            }
-        };
-    
         struct word {
             string text;
             ofRectangle rect;
@@ -102,8 +88,6 @@ class ofxParagraph{
     
         vector< word > mWords;
         vector< vector<word*> > mLines;
-    
-        static vector< ofxParagraph::font > mFonts;
     
         void render();
         inline void drawLeftAligned();

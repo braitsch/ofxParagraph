@@ -23,8 +23,6 @@
 
 #include "ofxParagraph.h"
 
-vector< ofxParagraph::font > ofxParagraph::mFonts;
-
 ofxParagraph::ofxParagraph(std::string text, int width, alignment align)
 : mFont(nullptr)
 , mColor(ofColor::black)
@@ -41,7 +39,6 @@ ofxParagraph::ofxParagraph(std::string text, int width, alignment align)
     setText(text);
     setAlignment(align);
     setWidth(width);
-    setFont("HelveticaNeueLTStd-Md.otf", 14);
 };
 
 void ofxParagraph::draw()
@@ -49,7 +46,7 @@ void ofxParagraph::draw()
     ofPushStyle();
         for (int i=0; i<mWords.size(); i++) {
             ofSetColor(mColor);
-            mFont->drawString(mWords[i].text, this->x + mWords[i].rect.x, this->y + mWords[i].rect.y);
+            mFont->draw(mWords[i].text, this->x + mWords[i].rect.x, this->y + mWords[i].rect.y);
             if (bDrawWordBoundaries == true){
                 ofPushStyle();
                 ofNoFill();
@@ -95,7 +92,7 @@ int ofxParagraph::getHeight()
 int ofxParagraph::getStringHeight(string s)
 {
     if (s == "") s = "ABCDEFGHIJKLMNOPQWXYZ1234567890";
-    return mFont->getStringBoundingBox(s, 0, 0).height;
+    return mFont->height(s);
 }
 
 void ofxParagraph::setPosition(int x, int y)
@@ -161,23 +158,11 @@ void ofxParagraph::setIndent(int indent)
 
 void ofxParagraph::setAlignment(alignment align)
 {
-    mAlign = align;
+    mAlignment = align;
     render();
 }
 
-void ofxParagraph::setFontFile(string file)
-{
-    mFontFile = file;
-    setFont(mFontFile, mFontSize);
-}
-
-void ofxParagraph::setFontSize(int size)
-{
-    mFontSize = size;
-    setFont(mFontFile, mFontSize);
-}
-
-void ofxParagraph::setFont(std::shared_ptr<ofTrueTypeFont> ttf)
+void ofxParagraph::setFont(std::shared_ptr<ofxSmartFont> ttf)
 {
     mFont = ttf;
     render();
@@ -185,28 +170,13 @@ void ofxParagraph::setFont(std::shared_ptr<ofTrueTypeFont> ttf)
 
 void ofxParagraph::setFont(std::string file, int size)
 {
-    mFontFile = file;
-    mFontSize = size;
-    bool cached = false;
-    for (int i=0; i<mFonts.size(); i++) {
-        if (mFonts[i].file == file && mFonts[i].size == size){
-            cached = true;
-            mFont = mFonts[i].ttf;
-            std::cout << "retrieving from cache : " + file + " at size " << size << endl;
-        }
-    }
-    if (!cached){
-        std::cout << "loading font : " + file + " at size " << size << endl;
-        font f = font(file, size);
-        mFonts.push_back(f);
-        mFont = f.ttf;
-    }
+    mFont = ofxSmartFont::add(file, size);
     render();
 }
 
 void ofxParagraph::render()
 {
-    if (mFont == nullptr || mFont->isLoaded() == false) return;
+    if (mFont == nullptr) return;
     mWords.clear();
     mLineHeight = 0;
     string str = mText;
@@ -216,20 +186,20 @@ void ofxParagraph::render()
     while ( position != string::npos )
     {
         string s = str.substr(0, position);
-        word w = {s, mFont->getStringBoundingBox(s, 0, 0)};
+        word w = {s, mFont->rect(s)};
         mWords.push_back(w);
         str.erase(0, position + 1);
         position = str.find(" ");
         if (w.rect.height > mLineHeight) mLineHeight = w.rect.height;
     }
 // append the last word //
-    word w = {str, mFont->getStringBoundingBox(str, 0, 0)};
+    word w = {str, mFont->rect(str)};
     mWords.push_back(w);
     if (w.rect.height > mLineHeight) mLineHeight = w.rect.height;
     
 // assign words to lines //
     int y = 0;
-    int x = mAlign == ALIGN_LEFT ? mIndent : 0;
+    int x = mAlignment == ALIGN_LEFT ? mIndent : 0;
     mLines.clear();
     vector<word*> line;
     for (int i=0; i<mWords.size(); i++) {
@@ -253,7 +223,7 @@ void ofxParagraph::render()
     mHeight = mLines.size() * (mLineHeight + mLeading);
     
 // reposition words for right & center aligned paragraphs //
-    if (mAlign == ALIGN_CENTER){
+    if (mAlignment == ALIGN_CENTER){
         for(int i=0; i<mLines.size(); i++) {
             int lineWidth = 0;
             for(int j=0; j<mLines[i].size(); j++) {
@@ -264,7 +234,7 @@ void ofxParagraph::render()
             int offset = (mWidth - lineWidth) / 2;
             for(int j=0; j<mLines[i].size(); j++) mLines[i][j]->rect.x += offset;
         }
-    }   else if (mAlign == ALIGN_RIGHT){
+    }   else if (mAlignment == ALIGN_RIGHT){
         for(int i=0; i<mLines.size(); i++) {
             word* lword = mLines[i].back();
         // calculate the distance the last word in each line is from the right boundary //
