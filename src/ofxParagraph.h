@@ -29,9 +29,14 @@ class ofxParagraph{
     
     public:
 
-        enum alignment { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
+        enum Alignment
+        {
+            ALIGN_LEFT = 1,
+            ALIGN_CENTER = 2,
+            ALIGN_RIGHT = 3
+        };
     
-        ofxParagraph(string text = "Stumptown street art photo booth try-hard cold-pressed, pour-over raw denim four loko vinyl. Banjo drinking vinegar tousled, Brooklyn Neutra meggings mlkshk freegan whatever. Authentic drinking vinegar next level Portland tattooed, street art mixtape. Butcher High Life Brooklyn bicycle rights. Cardigan iPhone stumptown 90's, Carles Neutra viral Brooklyn ugh disrupt. Truffaut Williamsburg sriracha four dollar toast bicycle rights four loko. Migas Odd Future disrupt DIY polaroid whatever.", int width = 620, alignment align = ALIGN_LEFT);
+        ofxParagraph(string text = "Stumptown street art photo booth try-hard cold-pressed, pour-over raw denim four loko vinyl. Banjo drinking vinegar tousled, Brooklyn Neutra meggings mlkshk freegan whatever. Authentic drinking vinegar next level Portland tattooed, street art mixtape. Butcher High Life Brooklyn bicycle rights. Cardigan iPhone stumptown 90's, Carles Neutra viral Brooklyn ugh disrupt. Truffaut Williamsburg sriracha four dollar toast bicycle rights four loko. Migas Odd Future disrupt DIY polaroid whatever.", int width = 620, Alignment align = ALIGN_LEFT);
     
         int x;
         int y;
@@ -46,7 +51,7 @@ class ofxParagraph{
         void setWidth(int width);
         void setIndent(int indent);
         void setPosition(int x, int y);
-        void setAlignment(alignment align);
+        void setAlignment(Alignment align);
         void setSpacing(int spacing);
         void setLeading(int leading);
         void setBorderPadding(int padding);
@@ -71,7 +76,7 @@ class ofxParagraph{
         int mLineHeight;
         string mText;
         ofColor mColor;
-        alignment mAlignment;
+        Alignment mAlignment;
     
         std::shared_ptr<ofxSmartFont> mFont;
 

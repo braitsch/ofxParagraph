@@ -23,7 +23,7 @@
 
 #include "ofxParagraph.h"
 
-ofxParagraph::ofxParagraph(std::string text, int width, alignment align)
+ofxParagraph::ofxParagraph(std::string text, int width, Alignment align)
 : mFont(nullptr)
 , mColor(ofColor::black)
 , mIndent(40)
@@ -163,7 +163,7 @@ void ofxParagraph::setIndent(int indent)
     render();
 }
 
-void ofxParagraph::setAlignment(alignment align)
+void ofxParagraph::setAlignment(Alignment align)
 {
     mAlignment = align;
     render();

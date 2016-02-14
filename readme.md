@@ -58,7 +58,7 @@ The following methods are available to customize any ofxParagraph instance.
 
 	void setPosition(int x, int y)
  
-	void setAlignment(ofxParagraph::alignment align)
+	void setAlignment(ofxParagraph::Alignment align)
  
 	void setIndent(int indent)
  
