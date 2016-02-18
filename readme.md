@@ -11,7 +11,7 @@ A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/) that
 
 **ofxParagraph** uses [ofxSmartFont](https://github.com/braitsch/ofxSmartFont) for font management which allows you to safely share ofxParagraph fonts with the rest of your application. 
 
-This requires you to clone the repository recursively.
+This requires you to clone the repository recursively if you don't already have it installed.
 
 	git clone --recursive git@github.com:braitsch/ofxParagraph.git
 
@@ -27,7 +27,7 @@ And then assigning a font you'd like to use:
 
  	paragraph.setFont("fonts/helvetica_neue.ttf", 12)
 
-Alternately you can pass in a pointer to an existing [ofxSmartFont](https://github.com/braitsch/ofxSmartFont) instance:
+Alternately you can pass in an [ofxSmartFont](https://github.com/braitsch/ofxSmartFont) instance:
 
 	shared_ptr<ofxSmartFont> helvetica_12;
 	paragraph.setFont(helvetica_12);
