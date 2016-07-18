@@ -24,7 +24,6 @@
 #pragma once
 #include <ofGraphics.h>
 #include "ofxSmartFont.h"
-#include <functional>
 
 class ofxParagraph{
     
