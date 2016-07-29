@@ -22,6 +22,8 @@
 */
 
 #pragma once
+
+#include <cctype>
 #include <ofGraphics.h>
 #include "ofxSmartFont.h"
 
