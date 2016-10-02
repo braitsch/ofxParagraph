@@ -216,11 +216,11 @@ void ofxParagraph::render()
             x += mWords[i].rect.width + mSpacing;
             line.push_back(&mWords[i]);
         }   else{
-            y+= mLineHeight + mLeading;
+            if (line.size() > 0 ) y+= mLineHeight + mLeading;
             mWords[i].rect.x = 0;
             mWords[i].rect.y = y;
             x = mWords[i].rect.width + mSpacing;
-            mLines.push_back(line);
+            if (line.size() > 0) mLines.push_back(line);
             line.clear();
             line.push_back(&mWords[i]);
         }
@@ -244,7 +244,7 @@ void ofxParagraph::render()
     }   else if (mAlignment == ALIGN_RIGHT){
         for(int i=0; i<mLines.size(); i++) {
             word* lword = mLines[i].back();
-        // calculate the distance the last word in each line is from the right boundary //
+    // calculate the distance the last word in each line is from the right boundary //
             int offset = mWidth - (lword->rect.x + lword->rect.width);
             for(int j=0; j<mLines[i].size(); j++) mLines[i][j]->rect.x += offset;
         }
