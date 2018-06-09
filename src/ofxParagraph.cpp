@@ -96,7 +96,7 @@ int ofxParagraph::getHeight()
     return mHeight;
 }
 
-int ofxParagraph::getStringHeight(string s)
+int ofxParagraph::getStringHeight(std::string s)
 {
     if (s == "") s = "ABCDEFGHIJKLMNOPQWXYZ1234567890";
     return mFont->height(s);
@@ -169,13 +169,13 @@ void ofxParagraph::setAlignment(Alignment align)
     render();
 }
 
-void ofxParagraph::setFont(shared_ptr<ofxSmartFont> ttf)
+void ofxParagraph::setFont(std::shared_ptr<ofxSmartFont> ttf)
 {
     mFont = ttf;
     render();
 }
 
-void ofxParagraph::setFont(string file, int size, string name)
+void ofxParagraph::setFont(std::string file, int size, std::string name)
 {
     mFont = ofxSmartFont::add(file, size, name);
     render();
@@ -186,13 +186,13 @@ void ofxParagraph::render()
     if (mFont == nullptr) return;
     mWords.clear();
     mLineHeight = 0;
-    string str = mText;
+    std::string str = mText;
     
 // break paragraph into words //
     int position = str.find(" ");
-    while ( position != string::npos )
+    while ( position != std::string::npos )
     {
-        string s = str.substr(0, position);
+        std::string s = str.substr(0, position);
         word w = {s, mFont->rect(s)};
         mWords.push_back(w);
         str.erase(0, position + 1);
@@ -208,7 +208,7 @@ void ofxParagraph::render()
     int y = 0;
     int x = mAlignment == ALIGN_LEFT ? mIndent : 0;
     mLines.clear();
-    vector<word*> line;
+    std::vector<word*> line;
     for (int i=0; i<mWords.size(); i++) {
         if (x + mWords[i].rect.width < mWidth){
             mWords[i].rect.x = x;

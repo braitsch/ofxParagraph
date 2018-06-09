@@ -36,14 +36,14 @@ class ofxParagraph{
             ALIGN_RIGHT = 3
         };
     
-        ofxParagraph(string text = "Stumptown street art photo booth try-hard cold-pressed, pour-over raw denim four loko vinyl. Banjo drinking vinegar tousled, Brooklyn Neutra meggings mlkshk freegan whatever. Authentic drinking vinegar next level Portland tattooed, street art mixtape. Butcher High Life Brooklyn bicycle rights. Cardigan iPhone stumptown 90's, Carles Neutra viral Brooklyn ugh disrupt. Truffaut Williamsburg sriracha four dollar toast bicycle rights four loko. Migas Odd Future disrupt DIY polaroid whatever.", int width = 620, Alignment align = ALIGN_LEFT);
+        ofxParagraph(std::string text = "Stumptown street art photo booth try-hard cold-pressed, pour-over raw denim four loko vinyl. Banjo drinking vinegar tousled, Brooklyn Neutra meggings mlkshk freegan whatever. Authentic drinking vinegar next level Portland tattooed, street art mixtape. Butcher High Life Brooklyn bicycle rights. Cardigan iPhone stumptown 90's, Carles Neutra viral Brooklyn ugh disrupt. Truffaut Williamsburg sriracha four dollar toast bicycle rights four loko. Migas Odd Future disrupt DIY polaroid whatever.", int width = 620, Alignment align = ALIGN_LEFT);
     
         int x;
         int y;
     
-        void setText(string text);
-        void setFont(string file, int ptSize, string name = "");
-        void setFont(shared_ptr<ofxSmartFont> font);
+        void setText(std::string text);
+        void setFont(std::string file, int ptSize, std::string name = "");
+        void setFont(std::shared_ptr<ofxSmartFont> font);
     
         void setColor(int color);
         void setColor(ofColor color);
@@ -58,7 +58,7 @@ class ofxParagraph{
     
         int getWidth();
         int getHeight();
-        int getStringHeight(string str = "");
+        int getStringHeight(std::string str = "");
     
         void draw();
         void draw(int x, int y);
@@ -74,7 +74,7 @@ class ofxParagraph{
         int mLeading;
         int mSpacing;
         int mLineHeight;
-        string mText;
+        std::string mText;
         ofColor mColor;
         Alignment mAlignment;
     
@@ -88,12 +88,12 @@ class ofxParagraph{
         ofColor mWordBoundaryColor;
     
         struct word {
-            string text;
+            std::string text;
             ofRectangle rect;
         };
     
-        vector< word > mWords;
-        vector< vector<word*> > mLines;
+        std::vector< word > mWords;
+        std::vector< std::vector<word*> > mLines;
     
         void render();
         inline void drawLeftAligned();
