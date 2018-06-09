@@ -5,9 +5,7 @@ A simple paragraph renderer for [openFrameworks](http://openframeworks.cc/) that
 
 ![image](./readme-img/layout-example.png)
 
---
-
-###Installation
+### Installation
 
 **ofxParagraph** uses [ofxSmartFont](https://github.com/braitsch/ofxSmartFont) for font management which allows you to safely share ofxParagraph fonts with the rest of your application. 
 
@@ -15,9 +13,7 @@ This requires you to clone the repository recursively if you don't already have 
 
 	git clone --recursive git@github.com:braitsch/ofxParagraph.git
 
---
-
-###Usage
+### Usage
 
 Creating a paragraph is as simple as passing in a string and setting a width.
 
@@ -38,9 +34,7 @@ Once you've got some text, a width and a font you're ready to draw:
 	// or specify a position //
 	paragraph.draw(int x, int y);
 
---
-
-###Customization
+### Customization
 
 The following methods are available to customize any ofxParagraph instance.
  
